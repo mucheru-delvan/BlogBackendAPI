@@ -1,4 +1,3 @@
-Absolutely. Since this is your **BlogBackendAPI** project, the README should explain the project clearly while showing that you actually implemented the requirements—not just copy the original assignment.
 
 # BlogBackendAPI
 
