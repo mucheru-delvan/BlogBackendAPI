@@ -1,9 +1,8 @@
-
 # BlogBackendAPI
 
 A RESTful API for a personal blogging platform built with **Python, Django REST Framework, and MySQL**.
 
-The API provides the core CRUD operations required for managing blog posts, including creating, retrieving, updating, deleting, and searching posts.
+The API provides core CRUD operations for managing blog posts, including creating, retrieving, updating, deleting, and searching posts.
 
 ## Features
 
@@ -20,8 +19,9 @@ The API provides the core CRUD operations required for managing blog posts, incl
 
 * **Python**
 * **Django**
-* **Django REST Framework (DRF)**
+* **Django REST Framework**
 * **MySQL**
+* **uv** – Python package and project management
 * **Git & GitHub**
 
 ## API Endpoints
@@ -158,7 +158,7 @@ If the post does not exist:
 
 ## Searching Blog Posts
 
-Posts can be filtered using a search term.
+Posts can be filtered using a search term:
 
 ```http
 GET /posts/?term=tech
@@ -170,11 +170,9 @@ The search checks the:
 * Content
 * Category
 
-For example, a search for `tech` returns posts where `tech` appears in one of those fields.
+For example, searching for `tech` returns posts where `tech` appears in the title, content, or category.
 
 ## HTTP Status Codes
-
-The API uses standard HTTP status codes:
 
 | Status Code       | Meaning                           |
 | ----------------- | --------------------------------- |
@@ -205,10 +203,13 @@ BlogBackendAPI/
 │
 ├── manage.py
 ├── pyproject.toml
+├── uv.lock
 └── README.md
 ```
 
 ## Installation
+
+This project uses **uv** for Python package and project management.
 
 ### 1. Clone the repository
 
@@ -217,43 +218,71 @@ git clone https://github.com/mucheru-delvan/BlogBackendAPI.git
 cd BlogBackendAPI
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Install uv
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
+If you do not already have `uv` installed, follow the official installation instructions.
 
-### 3. Install dependencies
+### 3. Install project dependencies
 
-If using `uv`:
+Run:
 
 ```bash
 uv sync
 ```
 
-Or install the required packages manually:
+`uv sync` creates the project's virtual environment and installs the dependencies defined in `pyproject.toml` using the versions recorded in `uv.lock`.
+
+### 4. Activate the virtual environment
+
+On Linux/macOS:
 
 ```bash
-pip install django djangorestframework mysqlclient
+source .venv/bin/activate
 ```
 
-### 4. Configure the database
+On Windows:
 
-Create a MySQL database and configure the database credentials in `settings.py`.
-
-Do **not** commit database passwords or other secrets to GitHub. Use environment variables for sensitive configuration.
-
-### 5. Run migrations
-
-```bash
-python manage.py migrate
+```powershell
+.venv\Scripts\activate
 ```
 
-### 6. Start the development server
+Alternatively, you can run commands through uv without manually activating the environment:
 
 ```bash
-python manage.py runserver
+uv run python manage.py runserver
+```
+
+### 5. Configure the database
+
+Create a MySQL database and configure the database connection in your Django settings.
+
+For example:
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "your_database_name",
+        "USER": "your_database_user",
+        "PASSWORD": "your_database_password",
+        "HOST": "localhost",
+        "PORT": "3306",
+    }
+}
+```
+
+**Do not commit database passwords or other secrets to GitHub.** Use environment variables or a `.env` file for sensitive configuration.
+
+### 6. Run migrations
+
+```bash
+uv run python manage.py migrate
+```
+
+### 7. Start the development server
+
+```bash
+uv run python manage.py runserver
 ```
 
 The API will be available at:
@@ -264,7 +293,7 @@ http://127.0.0.1:8000/
 
 ## Testing the API
 
-You can test the API using tools such as:
+You can test the API using:
 
 * Postman
 * cURL
@@ -273,8 +302,49 @@ You can test the API using tools such as:
 Example:
 
 ```bash
-curl http://127.0.0.1:8000/posts/
+uv run python manage.py runserver
 ```
+
+Then send:
+
+```http
+GET http://127.0.0.1:8000/posts/
+```
+
+## Dependency Management with uv
+
+To add a new dependency:
+
+```bash
+uv add package-name
+```
+
+For example:
+
+```bash
+uv add djangorestframework
+```
+
+To add a development dependency:
+
+```bash
+uv add --dev package-name
+```
+
+To remove a dependency:
+
+```bash
+uv remove package-name
+```
+
+To update project dependencies:
+
+```bash
+uv lock
+uv sync
+```
+
+The `pyproject.toml` file defines the project's dependencies, while `uv.lock` locks their exact versions for reproducible installations.
 
 ## Project Goal
 
@@ -289,7 +359,7 @@ This project was built to demonstrate practical understanding of:
 * Database relationships
 * Querying and filtering
 * API testing
-* Backend project structure
+* Python project and dependency management with uv
 
 ## Future Improvements
 
