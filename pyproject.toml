@@ -8,4 +8,5 @@ dependencies = [
     "django>=6.1",
     "djangorestframework>=3.18.0",
     "mysqlclient>=2.2.8",
+    "python-decouple>=3.8",
 ]
